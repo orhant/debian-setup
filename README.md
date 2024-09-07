@@ -6,20 +6,26 @@ Bu repo, Debian üzerinde çeşitli yazılımları ve servisleri kurmak için ge
 
 ### 1. Git Kurulumu
 Eğer Git makinenizde kurulu değilse, önce Git'i kurun:
+
 ```bash
 sudo apt update
-sudo apt install git -y```
-
+sudo apt install git -y 
+```
 ### 2. Repo'yu Klonlayın
-
 Klonlama işlemini gerçekleştirmek için aşağıdaki komutu kullanın:
 
 ```bash
 git clone https://github.com/orhant/debian-setup.git
+```
 
-### 3. Klonlanan Dizine Gidin
-
-Klonlanan dizine geçiş yapmak için aşağıdaki komutu kullanın:
+### 3. Klonlanan dizine gidin:
 
 ```bash
 cd debian-setup
+```
+
+### 4. Scriptleri çalıştırılabilir hale getirin:
+
+```bash
+chmod +x *.sh
+```
