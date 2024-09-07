@@ -52,9 +52,44 @@ Bu script Nginx, PHP ve MariaDB kurulumunu yapar.
 ./03_webserver.sh
 ```
 
-####  03_webserver.sh
-Bu script Nginx, PHP ve MariaDB kurulumunu yapar.
+####  04_certbot.sh
+Bu script Let's Encrypt (Certbot) kullanarak SSL sertifikası kurar.
 
 ```bash
-./03_webserver.sh
+./04_certbot.sh
+```
+
+####  05_phpmyadmin.sh
+Bu script phpMyAdmin kurulumu ve Nginx yapılandırmasını yapar.
+
+```bash
+./05_phpmyadmin.sh
+```
+
+####  06_code-server.sh
+Bu script Code-Server kurulumunu yapar.
+
+```bash
+./06_code-server.sh
+```
+
+####  07_webmin.sh
+Bu script Webmin kurulumunu ve Nginx ile SSL entegrasyonunu yapar.
+
+```bash
+./07_webmin.sh
+```
+
+####  08_cdsdk.sh
+Bu script Cloud9 SDK kurulumunu yapar.
+
+```bash
+./08_cdsdk.sh
+```
+
+####  09_mail.sh
+Bu script Postfix, Dovecot ve Roundcube mail sunucusunu kurar
+
+```bash
+./09_mail.sh
 ```
