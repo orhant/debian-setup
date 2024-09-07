@@ -44,3 +44,17 @@ Bu script UFW (güvenlik duvarı) ve Fail2Ban güvenlik yapılandırması içind
 ```bash
 ./02_security.sh
 ```
+
+####  03_webserver.sh
+Bu script Nginx, PHP ve MariaDB kurulumunu yapar.
+
+```bash
+./03_webserver.sh
+```
+
+####  03_webserver.sh
+Bu script Nginx, PHP ve MariaDB kurulumunu yapar.
+
+```bash
+./03_webserver.sh
+```
