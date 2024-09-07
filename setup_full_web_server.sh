@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+# Locale ayarları
+echo "Locale ayarları yapılıyor..."
+sudo locale-gen en_US.UTF-8
+sudo locale-gen en_GB.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_GB.UTF-8
+sudo dpkg-reconfigure -f noninteractive locales
+
 # Kullanıcıdan sunucu yapılandırması için promptlar
 read -p "Node.js versiyonu (varsayılan: 18.x): " NODE_VERSION
 NODE_VERSION=${NODE_VERSION:-18.x}
