@@ -28,3 +28,13 @@ echo "MariaDB kuruluyor..."
 sudo apt install mariadb-server mariadb-client -y
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
+
+# MariaDB Güvenlik Yapılandırması
+echo "MariaDB güvenlik yapılandırması yapılıyor..."
+sudo mysql_secure_installation
+
+# MariaDB'ye Kök Kullanıcısı Olarak Giriş Yapma
+echo "MariaDB'ye kök kullanıcısı olarak giriş yapılacak..."
+sudo mysql -u root -p -e "SELECT USER();"
+
+echo "Kurulum ve yapılandırma tamamlandı."
