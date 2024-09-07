@@ -29,3 +29,18 @@ cd debian-setup
 ```bash
 chmod +x *.sh
 ```
+### 5. Scriptleri sırayla çalıştırın ve sorulara cevap verin:
+
+####  01_update.sh
+Bu script sistem güncellemesi ve temel paketlerin kurulumu için kullanılır.
+
+```bash
+./01_update.sh
+```
+
+####  02_security.sh
+Bu script UFW (güvenlik duvarı) ve Fail2Ban güvenlik yapılandırması içindir.
+
+```bash
+./02_security.sh
+```
