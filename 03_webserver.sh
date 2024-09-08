@@ -69,6 +69,14 @@ sudo cp -a ~/git/wordpress-nginx/* /etc/nginx/
 sudo mkdir -p /etc/nginx/sites-enabled &> /dev/null
 sudo cp /etc/nginx/nginx.conf /etc/nginx/
 
+# /etc/nginx/sites-enabled altındaki dosyaları temizleme
+echo "/etc/nginx/sites-enabled altındaki dosyalar temizleniyor..."
+sudo rm -rf /etc/nginx/sites-enabled/*
+
+# /etc/nginx/sites-available/default.conf dosyasını etkinleştirme
+echo "/etc/nginx/sites-available/default.conf dosyası etkinleştiriliyor..."
+sudo ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
+
 # Nginx servisini yeniden başlatma
 sudo systemctl reload nginx
 

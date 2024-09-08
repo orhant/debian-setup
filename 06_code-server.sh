@@ -22,9 +22,9 @@ if systemctl is-active --quiet code-server@$CODE_USER; then
     sudo rm -rf /root/.config/code-server/
     
     # Nginx Code-Server yapılandırması kaldırılıyor
-    if [ -f /etc/nginx/sites-available/$DOMAIN_NAME ]; then
-        sudo rm /etc/nginx/sites-available/$DOMAIN_NAME
-        sudo rm /etc/nginx/sites-enabled/$DOMAIN_NAME
+    if [ -f /etc/nginx/sites-available/$DOMAIN_NAME.conf ]; then
+        sudo rm /etc/nginx/sites-available/$DOMAIN_NAME.conf
+        sudo rm /etc/nginx/sites-enabled/$DOMAIN_NAME.conf
         sudo systemctl reload nginx
         echo "Nginx Code-Server yapılandırması kaldırıldı."
     else
@@ -58,7 +58,7 @@ sudo chown -R $CODE_USER:$CODE_USER /root/.config/
 
 # Nginx Konfigürasyonu Code-Server için (WebSocket ile)
 echo "Nginx Code-Server için yapılandırılıyor..."
-sudo tee /etc/nginx/sites-available/$DOMAIN_NAME > /dev/null <<EOL
+sudo tee /etc/nginx/sites-available/$DOMAIN_NAME.conf > /dev/null <<EOL
 server {
     server_name $DOMAIN_NAME;
 
@@ -78,7 +78,7 @@ server {
 }
 EOL
 
-sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME.conf /etc/nginx/sites-enabled/
 sudo systemctl reload nginx
 
 # UFW yapılandırması (HTTP ve HTTPS açılıyor, 8081 kapanıyor)

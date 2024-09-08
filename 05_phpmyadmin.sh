@@ -9,7 +9,7 @@ read -p "phpMyAdmin için domain adı girin (örn: pma.veobu.com): " DOMAIN_NAME
 
 # Nginx Konfigürasyonu phpMyAdmin için
 echo "Nginx phpMyAdmin için yapılandırılıyor..."
-sudo tee /etc/nginx/sites-available/$DOMAIN_NAME > /dev/null <<EOL
+sudo tee /etc/nginx/sites-available/$DOMAIN_NAME.conf > /dev/null <<EOL
 server {
     server_name $DOMAIN_NAME;
 
@@ -32,7 +32,7 @@ server {
 EOL
 
 # phpMyAdmin Nginx'e ekleme ve yeniden başlatma
-sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME.conf /etc/nginx/sites-enabled/
 sudo systemctl reload nginx
 
 # Certbot SSL Sertifikası Oluşturma
