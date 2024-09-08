@@ -61,7 +61,7 @@ sudo cp -a /etc/nginx ~/nginx-backup-$TIMESTAMP
 # WordPress Nginx yapılandırmasını GitHub'dan indirme
 echo "WordPress Nginx yapılandırması indiriliyor..."
 sudo apt install git -y
-git clone https://github.com/pothi/wordpress-nginx.git ~/git/wordpress-nginx
+git clone https://github.com/orhant/wordpress-nginx ~/git/wordpress-nginx
 
 # WordPress Nginx yapılandırmasını uygulama
 echo "WordPress Nginx yapılandırması uygulanıyor..."
@@ -78,8 +78,7 @@ echo "/etc/nginx/sites-available/default.conf dosyası etkinleştiriliyor..."
 sudo ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
 # /etc/nginx/nginx.conf dosyasını güncelleme
-echo "/etc/nginx/nginx.conf dosyasında 'user www-data' ayarlanıyor..."
-sudo sed -i 's/#*user .*/user www-data;/' /etc/nginx/nginx.conf
+ 
 
 
 # Nginx servisini yeniden başlatma
