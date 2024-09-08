@@ -77,6 +77,14 @@ sudo rm -rf /etc/nginx/sites-enabled/*
 echo "/etc/nginx/sites-available/default.conf dosyası etkinleştiriliyor..."
 sudo ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
+# /etc/nginx/nginx.conf dosyasını güncelleme
+echo "/etc/nginx/nginx.conf dosyasında 'user www-data' ayarlanıyor..."
+sudo sed -i 's/user .*/user www-data;/' /etc/nginx/nginx.conf
+
+# /etc/nginx/conf.d/lb.conf dosyasında PHP-FPM soketi güncelleme
+echo "/etc/nginx/conf.d/lb.conf dosyasında PHP-FPM soketi güncelleniyor..."
+sudo sed -i 's|server unix:/path/to/socket;|server unix:/run/php/php8.2-fpm.sock;|' /etc/nginx/conf.d/lb.conf
+
 # Nginx servisini yeniden başlatma
 sudo systemctl reload nginx
 

@@ -31,14 +31,17 @@ fi
 read -p "Domain adını girin (örn: example.com): " WP_DOMAIN
 
 # WordPress kök dizini ve Nginx yapılandırma dosyasını belirleme
-WP_ROOT="/var/www/html/$WP_DOMAIN"
+WP_ROOT="/var/www/wp-sites/$WP_DOMAIN"
 NGINX_CONF_TEMPLATE="/etc/nginx/sites-available/example.com.conf"
 
-# WordPress dizinini oluşturma ve dosya indirme
-echo "WordPress dizini oluşturuluyor ve WordPress indiriliyor..."
+# WordPress dizinini oluşturma
+echo "WordPress dizini oluşturuluyor..."
 sudo mkdir -p $WP_ROOT
 sudo chown -R $USER:$USER $WP_ROOT
+
+# WordPress dosyalarını indirip kurma
 cd $WP_ROOT
+echo "WordPress indiriliyor..."
 wget https://wordpress.org/latest.tar.gz
 tar -xzf latest.tar.gz --strip-components=1
 rm latest.tar.gz
@@ -62,7 +65,13 @@ sed -i "s/database_name_here/$WP_DB_NAME/" $WP_ROOT/wp-config.php
 sed -i "s/username_here/$WP_DB_USER/" $WP_ROOT/wp-config.php
 sed -i "s/password_here/$WP_DB_PASSWORD/" $WP_ROOT/wp-config.php
 
+# Salt Keys oluşturma ve wp-config.php'ye ekleme
+echo "Salt keys oluşturuluyor..."
+SALT_KEYS=$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
+sed -i "/#@+/r /dev/stdin" $WP_ROOT/wp-config.php <<< "$SALT_KEYS"
+
 # WordPress için gerekli dosya izinleri ayarlama
+echo "Dosya ve dizin izinleri ayarlanıyor..."
 sudo chown -R www-data:www-data $WP_ROOT
 sudo find $WP_ROOT -type d -exec chmod 750 {} \;
 sudo find $WP_ROOT -type f -exec chmod 640 {} \;
