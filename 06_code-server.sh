@@ -1,22 +1,37 @@
 #!/bin/bash
 
-# Code-Server Kurulumu
+# Code-Server Kullanıcı Adını Al
 read -p "Code-Server için kurmak istediğiniz kullanıcı adı: " CODE_USER
-read -sp "Code-Server için bir şifre belirleyin: " CODE_PASSWORD
-echo
 
-# Code-Server kurulumu
+# Code-Server Konfigürasyonlarını Temizle
+echo "Code-Server konfigürasyon dosyaları temizleniyor..."
+sudo rm -rf /home/$CODE_USER/.config/code-server
+
+# Code-Server Servisini Durdur ve Kaldır
+echo "Code-Server servisi durduruluyor ve kaldırılıyor..."
+sudo systemctl stop code-server@$CODE_USER
+sudo systemctl disable code-server@$CODE_USER
+
+# Nginx Konfigürasyon Dosyalarını Temizle
+echo "Nginx konfigürasyon dosyaları temizleniyor..."
+sudo rm /etc/nginx/sites-available/code-server
+sudo rm /etc/nginx/sites-enabled/code-server
+
+# Code-Server Kurulumu
 echo "Code-Server kuruluyor..."
 curl -fsSL https://code-server.dev/install.sh | sh
+
+# Code-Server Servisini Etkinleştir
+echo "Code-Server servisi etkinleştiriliyor..."
 sudo systemctl enable --now code-server@$CODE_USER
 
-# Code-Server yapılandırması (başka bir port kullanıyoruz, örn. 8081)
-echo "Code-Server yapılandırılıyor..."
+# Code-Server Yapılandırmasını Yap
+echo "Code-Server yapılandırması yapılıyor..."
 sudo mkdir -p /home/$CODE_USER/.config/code-server/
 sudo tee /home/$CODE_USER/.config/code-server/config.yaml > /dev/null <<EOL
 bind-addr: 0.0.0.0:8081
 auth: password
-password: $CODE_PASSWORD
+password: $(openssl rand -base64 12)
 cert: false
 EOL
 
@@ -42,6 +57,7 @@ sudo ln -s /etc/nginx/sites-available/code-server /etc/nginx/sites-enabled/
 sudo systemctl reload nginx
 
 # UFW yapılandırması (HTTP ve HTTPS açılıyor)
+echo "UFW yapılandırması yapılıyor..."
 sudo ufw allow 'Nginx Full'
 sudo ufw allow 8081/tcp
 
