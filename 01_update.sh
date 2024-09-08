@@ -5,6 +5,11 @@ if ! dpkg -l | grep -q sudo; then
     echo "Sudo paketi kuruluyor..."
     apt install sudo -y
 fi
+sudo apt update
+sudo apt install locales
+sudo dpkg-reconfigure locales
+cat /etc/default/locale
+locale
 
 # Locale ayarları
 echo "Locale ayarları yapılıyor..."
