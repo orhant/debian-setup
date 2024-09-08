@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Kullanıcı adı sabit olarak root olacak
+CODE_USER="root"
+
 # Code-Server ve Nginx yapılandırmalarını kaldırma kontrolü
 echo "Code-Server daha önce kuruldu mu kontrol ediliyor..."
 
@@ -13,7 +16,7 @@ if systemctl is-active --quiet code-server@$CODE_USER; then
     sudo systemctl disable code-server@$CODE_USER
     
     # Code-Server yapılandırma dosyaları kaldırılıyor
-    sudo rm -rf /home/$CODE_USER/.config/code-server/
+    sudo rm -rf /root/.config/code-server/
     
     # Nginx Code-Server yapılandırması kaldırılıyor
     if [ -f /etc/nginx/sites-available/code-server ]; then
@@ -30,8 +33,7 @@ else
     echo "Code-Server kurulumu bulunamadı, temizlemeye gerek yok."
 fi
 
-# Yeni Code-Server kurulumu
-read -p "Code-Server için kurmak istediğiniz kullanıcı adı: " CODE_USER
+# Code-Server şifresini belirleyin
 read -sp "Code-Server için bir şifre belirleyin: " CODE_PASSWORD
 echo
 
@@ -41,15 +43,15 @@ sudo systemctl enable --now code-server@$CODE_USER
 
 # Code-Server yapılandırması
 echo "Code-Server yapılandırılıyor..."
-sudo mkdir -p /home/$CODE_USER/.config/code-server/
-sudo tee /home/$CODE_USER/.config/code-server/config.yaml > /dev/null <<EOL
+sudo mkdir -p /root/.config/code-server/
+sudo tee /root/.config/code-server/config.yaml > /dev/null <<EOL
 bind-addr: 0.0.0.0:8081
 auth: password
 password: $CODE_PASSWORD
 cert: false
 EOL
 
-sudo chown -R $CODE_USER:$CODE_USER /home/$CODE_USER/.config/
+sudo chown -R $CODE_USER:$CODE_USER /root/.config/
 
 # Nginx Konfigürasyonu Code-Server için
 echo "Nginx Code-Server için yapılandırılıyor..."
