@@ -52,4 +52,35 @@ fi
 echo "MariaDB root kullanıcısı şifresi ayarlanıyor..."
 sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
 
-echo "Kurulum ve yapılandırma tamamlandı."
+# Nginx yapılandırmasının yedeğini alma
+echo "Nginx yapılandırması yedekleniyor..."
+TIMESTAMP=$(date +%F_%H-%M-%S)
+mkdir ~/nginx-backup-$TIMESTAMP
+sudo cp -a /etc/nginx ~/nginx-backup-$TIMESTAMP
+
+# WordPress Nginx yapılandırmasını GitHub'dan indirme
+echo "WordPress Nginx yapılandırması indiriliyor..."
+sudo apt install git -y
+git clone https://github.com/pothi/wordpress-nginx.git ~/git/wordpress-nginx
+
+# WordPress Nginx yapılandırmasını uygulama
+echo "WordPress Nginx yapılandırması uygulanıyor..."
+sudo cp -a ~/git/wordpress-nginx/* /etc/nginx/
+sudo mkdir -p /etc/nginx/sites-enabled &> /dev/null
+sudo cp /etc/nginx/nginx.conf /etc/nginx/
+
+# Nginx servisini yeniden başlatma
+sudo systemctl reload nginx
+
+# Certbot kurulumu ve SSL yapılandırması (Eğer Certbot yüklü değilse)
+if ! command -v certbot &>/dev/null; then
+    echo "Certbot kuruluyor..."
+    sudo apt install certbot python3-certbot-nginx -y
+fi
+
+# wp_create betiğini /usr/local/bin'e kopyalayıp çalıştırılabilir hale getirme
+echo "wp_create betiği oluşturuluyor..."
+sudo cp wp_create.sh /usr/local/bin/wp_create
+sudo chmod +x /usr/local/bin/wp_create
+
+echo "wp_create komutu başarıyla oluşturuldu. Artık terminalde 'wp_create' komutunu kullanabilirsiniz."
