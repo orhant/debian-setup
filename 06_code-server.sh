@@ -84,7 +84,7 @@ sudo systemctl restart nginx
 
 # UFW yapılandırması (HTTP ve HTTPS açılıyor, 8081 kapanıyor)
 sudo ufw allow 'Nginx Full'
-sudo ufw allow allow 8081/tcp
+sudo ufw delete allow 8081/tcp
 
 # Certbot SSL Sertifikası Oluşturma
 echo "Certbot ile SSL sertifikası alınıyor..."
