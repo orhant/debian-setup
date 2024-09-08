@@ -2,7 +2,10 @@
 
 # Code-Server Kurulumu
 read -p "Code-Server için kurmak istediğiniz kullanıcı adı: " CODE_USER
+read -sp "Code-Server için bir şifre belirleyin: " CODE_PASSWORD
+echo
 
+# Code-Server kurulumu
 echo "Code-Server kuruluyor..."
 curl -fsSL https://code-server.dev/install.sh | sh
 sudo systemctl enable --now code-server@$CODE_USER
@@ -11,9 +14,9 @@ sudo systemctl enable --now code-server@$CODE_USER
 echo "Code-Server yapılandırılıyor..."
 sudo mkdir -p /home/$CODE_USER/.config/code-server/
 sudo tee /home/$CODE_USER/.config/code-server/config.yaml > /dev/null <<EOL
-bind-addr: 127.0.0.1:8081
+bind-addr: 0.0.0.0:8081
 auth: password
-password: $(openssl rand -base64 12)
+password: $CODE_PASSWORD
 cert: false
 EOL
 
@@ -40,6 +43,7 @@ sudo systemctl reload nginx
 
 # UFW yapılandırması (HTTP ve HTTPS açılıyor)
 sudo ufw allow 'Nginx Full'
+sudo ufw allow 8081/tcp
 
 # Certbot SSL Sertifikası Oluşturma
 echo "Certbot ile SSL sertifikası alınıyor..."
