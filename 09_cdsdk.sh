@@ -2,13 +2,24 @@
 
 # Cloud9 SDK Kurulumu
 echo "Cloud9 SDK kuruluyor..."
-sudo npm install -g c9
+git clone git://github.com/c9/core.git c9sdk
+cd c9sdk
+scripts/install-sdk.sh
 
 # Forever paketinin kurulumu
+echo "Forever paketi kuruluyor..."
 sudo npm install -g forever
 
 # Cloud9 Kullanıcı Dizini
 read -p "Cloud9 için bir kullanıcı adı girin: " CLOUD9_USER
+
+# Kullanıcı oluşturma
+if id "$CLOUD9_USER" &>/dev/null; then
+    echo "Kullanıcı zaten mevcut: $CLOUD9_USER"
+else
+    echo "Kullanıcı oluşturuluyor: $CLOUD9_USER"
+    sudo adduser --disabled-password --gecos "" $CLOUD9_USER
+fi
 
 # Şifreyi iki kez sor ve doğrula
 while true; do
@@ -23,10 +34,12 @@ done
 echo "Şifre başarıyla ayarlandı."
 
 # Cloud9 çalışma dizini ayarlanıyor
+echo "Cloud9 çalışma dizini oluşturuluyor..."
 sudo mkdir -p /home/$CLOUD9_USER/cloud9_workspace
 sudo chown -R $CLOUD9_USER:$CLOUD9_USER /home/$CLOUD9_USER/cloud9_workspace
 
-# Cloud9 yapılandırması (şifreli erişim)
+# Cloud9 yapılandırması
+echo "Cloud9 yapılandırması yapılıyor..."
 sudo tee /home/$CLOUD9_USER/.config/code-server/config.yaml > /dev/null <<EOL
 bind-addr: 127.0.0.1:8181
 auth: password
@@ -36,7 +49,12 @@ EOL
 
 sudo chown -R $CLOUD9_USER:$CLOUD9_USER /home/$CLOUD9_USER/.config/
 
+# Cloud9'ı başlat
+echo "Cloud9 başlatılıyor..."
+sudo -u $CLOUD9_USER forever start /path/to/c9sdk/server.js --listen 127.0.0.1 --port 8181 --user $CLOUD9_USER --password $PASSWORD --workspaces /home/$CLOUD9_USER/cloud9_workspace
+
 # Nginx Konfigürasyonu Cloud9 için (c9.veobu.com)
+echo "Nginx yapılandırması yapılıyor..."
 sudo tee /etc/nginx/sites-available/cloud9 > /dev/null <<EOL
 server {
     server_name c9.veobu.com;
@@ -54,15 +72,4 @@ EOL
 sudo ln -s /etc/nginx/sites-available/cloud9 /etc/nginx/sites-enabled/
 sudo systemctl reload nginx
 
-# Cloud9'u forever ile arka planda başlatma
-echo "Cloud9 SDK arka planda başlatılıyor..."
-forever start /usr/local/bin/c9 start --listen 0.0.0.0 --port 8181 -w /home/$CLOUD9_USER/cloud9_workspace
-
-# Cron ile yeniden başlatıldığında otomatik başlatma
-(crontab -l 2>/dev/null; echo "@reboot /usr/local/bin/forever start /usr/local/bin/c9 start --listen 0.0.0.0 --port 8181 -w /home/$CLOUD9_USER/cloud9_workspace") | crontab -
-
-# Certbot ile SSL Sertifikası Oluşturma
-echo "Certbot ile SSL sertifikası alınıyor..."
-sudo certbot --nginx -d c9.veobu.com
-
-echo "Cloud9 SSL ile https://c9.veobu.com adresinden erişilebilir."
+echo "Cloud9 kurulumu ve yapılandırması tamamlandı."
