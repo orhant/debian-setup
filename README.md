@@ -8,6 +8,7 @@ Bu repo, Debian üzerinde çeşitli yazılımları ve servisleri kurmak için ge
 Eğer Git makinenizde kurulu değilse, önce Git'i kurun:
 
 ```bash
+apt install sudo -y
 sudo apt update
 sudo apt install git -y 
 ```
