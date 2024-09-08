@@ -9,7 +9,6 @@ sudo apt update
 sudo apt install locales
 sudo dpkg-reconfigure locales
 cat /etc/default/locale
-locale
 
 # Locale ayarları
 echo "Locale ayarları yapılıyor..."
