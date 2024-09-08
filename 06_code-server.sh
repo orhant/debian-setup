@@ -48,7 +48,7 @@ sudo systemctl enable --now code-server@$CODE_USER
 echo "Code-Server yapılandırılıyor..."
 sudo mkdir -p /root/.config/code-server/
 sudo tee /root/.config/code-server/config.yaml > /dev/null <<EOL
-bind-addr: 127.0.0.1:8081
+bind-addr: 0.0.0.0:8081.
 auth: password
 password: $CODE_PASSWORD
 cert: false
