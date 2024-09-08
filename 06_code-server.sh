@@ -79,11 +79,12 @@ server {
 EOL
 
 sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME.conf /etc/nginx/sites-enabled/
-sudo systemctl reload nginx
+ 
+sudo systemctl restart nginx
 
 # UFW yapılandırması (HTTP ve HTTPS açılıyor, 8081 kapanıyor)
 sudo ufw allow 'Nginx Full'
-sudo ufw delete allow 8081/tcp
+sudo ufw allow allow 8081/tcp
 
 # Certbot SSL Sertifikası Oluşturma
 echo "Certbot ile SSL sertifikası alınıyor..."
