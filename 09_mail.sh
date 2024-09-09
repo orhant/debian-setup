@@ -53,3 +53,11 @@ echo "Certbot ile SSL sertifikası alınıyor..."
 sudo certbot --nginx -d mail.veobu.com
 
 echo "Roundcube Webmail SSL ile https://mail.veobu.com adresinden erişilebilir."
+
+
+# add_mail_domain betiğini /usr/local/bin'e kopyalayıp çalıştırılabilir hale getirme
+echo "add_mail_domain betiği oluşturuluyor..."
+sudo cp add_mail_domain.sh /usr/local/bin/add_mail_domain
+sudo chmod +x /usr/local/bin/add_mail_domain
+
+echo "add_mail_domain komutu başarıyla oluşturuldu. Artık terminalde 'add_mail_domain' komutunu kullanabilirsiniz."
