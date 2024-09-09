@@ -51,6 +51,8 @@ fi
 
 echo "MariaDB root kullanıcısı şifresi ayarlanıyor..."
 sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+
 
 # Nginx yapılandırmasının yedeğini alma
 echo "Nginx yapılandırması yedekleniyor..."

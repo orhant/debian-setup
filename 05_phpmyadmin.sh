@@ -5,7 +5,7 @@ echo "phpMyAdmin kuruluyor..."
 sudo apt install phpmyadmin -y --no-install-recommends
 
 # Domain adını alın
-read -p "phpMyAdmin için domain adı girin (örn: pma.veobu.com): " DOMAIN_NAME
+read -p "phpMyAdmin için domain adı girin (örn: db.veobu.com): " DOMAIN_NAME
 
 # Nginx Konfigürasyonu phpMyAdmin için
 echo "Nginx phpMyAdmin için yapılandırılıyor..."

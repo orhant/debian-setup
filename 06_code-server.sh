@@ -4,7 +4,7 @@
 CODE_USER="root"
 
 # Domain adını alın
-read -p "Domain adı girin (örn: code.veobu.com): " DOMAIN_NAME
+read -p "Domain adı girin (örn: vscode.veobu.com): " DOMAIN_NAME
 
 # Code-Server ve Nginx yapılandırmalarını kaldırma kontrolü
 echo "Code-Server daha önce kuruldu mu kontrol ediliyor..."
