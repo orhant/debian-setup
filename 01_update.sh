@@ -41,9 +41,18 @@ sudo apt install docker-ce -y
 sudo systemctl enable docker
 sudo systemctl start docker
 
+# Netstat, Mailutils ve Rsyslog kurulumu
+echo "Netstat (net-tools), Mailutils ve Rsyslog kuruluyor..."
+sudo apt install net-tools mailutils rsyslog -y
+
+# Rsyslog başlatma ve etkinleştirme
+sudo systemctl start rsyslog
+sudo systemctl enable rsyslog
+
 # Python ve Docker sürümlerini kontrol et
 python3 --version
 pip3 --version
 node -v
 yarn -v
 docker --version
+netstat --version
