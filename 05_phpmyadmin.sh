@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# MariaDB root şifresini sıfırlama ve yeni şifre ayarlama
+echo "MariaDB root şifresi sıfırlanıyor ve yeni şifre ayarlanıyor..."
+sudo mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('Nurdan*123'); FLUSH PRIVILEGES;"
+
 # phpMyAdmin kurulumu
 echo "phpMyAdmin kuruluyor..."
 sudo apt install phpmyadmin -y --no-install-recommends
@@ -30,21 +34,25 @@ server {
         try_files \$uri \$uri/ =404;
     }
 
-    location ~* \.php\$ {
-        fastcgi_split_path_info ^(.+\.php)(/.*)\$;
-        if (!-f \$document_root\$fastcgi_script_name) { return 404; }
+    # Erişim ve hata loglarını ayarlayın
+    access_log /var/log/nginx/$DOMAIN_NAME-access.log;
+    error_log /var/log/nginx/$DOMAIN_NAME-error.log;
+
+    include globals/restrictions.conf;
+    include globals/assets.conf;
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        if (!-f $document_root$fastcgi_script_name) { return 404; }
 
         # Mitigate https://httpoxy.org/ vulnerabilities
         fastcgi_param HTTP_PROXY "";
 
         include "fastcgi_params";
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        fastcgi_index index.php;
-        fastcgi_pass unix:/var/run/php/php-fpm.sock;
-
-        add_header "X-Cache" "MISS";
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_index               index.php;
+        fastcgi_pass                fpm;
     }
-
     location ~ /\.ht {
         deny all;
     }
