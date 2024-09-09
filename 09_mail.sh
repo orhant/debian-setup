@@ -2,6 +2,10 @@
 
 # Postfix ve Dovecot Kurulumu
 echo "Postfix ve Dovecot kuruluyor..."
+sudo apt install rsyslog
+sudo systemctl start rsyslog
+sudo systemctl enable rsyslog
+
 sudo apt install postfix dovecot-core dovecot-imapd -y
 sudo systemctl enable postfix dovecot
 sudo systemctl start postfix dovecot
