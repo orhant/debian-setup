@@ -34,24 +34,34 @@ sudo systemctl enable mariadb
 echo "MariaDB güvenlik yapılandırması yapılıyor..."
 sudo mysql_secure_installation
 
+ 
 # MariaDB'ye Kök Kullanıcısı Olarak Giriş Yapma
 echo "MariaDB'ye kök kullanıcısı olarak giriş yapılacak..."
 sudo mysql -u root -p -e "SELECT USER();"
 
 # Root kullanıcısı için yeni şifre belirleme
-read -sp "MariaDB root kullanıcısı için yeni bir şifre girin: " NEW_ROOT_PASSWORD
-echo
-read -sp "Şifreyi tekrar girin: " NEW_ROOT_PASSWORD_CONFIRM
-echo
+# read -sp "MariaDB root kullanıcısı için yeni bir şifre girin: " NEW_ROOT_PASSWORD
+# echo
+# read -sp "Şifreyi tekrar girin: " NEW_ROOT_PASSWORD_CONFIRM
+# echo
 
-if [ "$NEW_ROOT_PASSWORD" != "$NEW_ROOT_PASSWORD_CONFIRM" ]; then
-    echo "Şifreler uyuşmuyor. Lütfen tekrar deneyin."
-    exit 1
-fi
+# if [ "$NEW_ROOT_PASSWORD" != "$NEW_ROOT_PASSWORD_CONFIRM" ]; then
+#     echo "Şifreler uyuşmuyor. Lütfen tekrar deneyin."
+#     exit 1
+# fi
 
 echo "MariaDB root kullanıcısı şifresi ayarlanıyor..."
-sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
-sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+# Root kullanıcısının şifresini ayarlayın (normal doğrulama yöntemiyle)
+# sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+
+# Root kullanıcısını mysql_native_password doğrulama yöntemine geçirin
+# sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+
+# Root kullanıcısını unix_socket doğrulama yöntemine geçirin
+echo "MariaDB root kullanıcısı unix_socket kimlik doğrulama yöntemine ayarlanıyor..."
+sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket; FLUSH PRIVILEGES;"
+
+echo "MariaDB root kullanıcısı için şifre ve doğrulama yöntemleri başarıyla ayarlandı."
 
 
 # Nginx yapılandırmasının yedeğini alma
