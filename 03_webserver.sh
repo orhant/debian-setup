@@ -36,8 +36,8 @@ sudo mysql_secure_installation
 
  
 # MariaDB'ye Kök Kullanıcısı Olarak Giriş Yapma
-echo "MariaDB'ye kök kullanıcısı olarak giriş yapılacak..."
-sudo mysql -u root -p -e "SELECT USER();"
+# echo "MariaDB'ye kök kullanıcısı olarak giriş yapılacak..."
+# sudo mysql -u root -p -e "SELECT USER();"
 
 # Root kullanıcısı için yeni şifre belirleme
 # read -sp "MariaDB root kullanıcısı için yeni bir şifre girin: " NEW_ROOT_PASSWORD
@@ -50,18 +50,18 @@ sudo mysql -u root -p -e "SELECT USER();"
 #     exit 1
 # fi
 
-echo "MariaDB root kullanıcısı şifresi ayarlanıyor..."
-# Root kullanıcısının şifresini ayarlayın (normal doğrulama yöntemiyle)
-# sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+# echo "MariaDB root kullanıcısı şifresi ayarlanıyor..."
+# # Root kullanıcısının şifresini ayarlayın (normal doğrulama yöntemiyle)
+# # sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
 
-# Root kullanıcısını mysql_native_password doğrulama yöntemine geçirin
-# sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+# # Root kullanıcısını mysql_native_password doğrulama yöntemine geçirin
+# # sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$NEW_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
 
-# Root kullanıcısını unix_socket doğrulama yöntemine geçirin
-echo "MariaDB root kullanıcısı unix_socket kimlik doğrulama yöntemine ayarlanıyor..."
-sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket; FLUSH PRIVILEGES;"
+# # Root kullanıcısını unix_socket doğrulama yöntemine geçirin
+# echo "MariaDB root kullanıcısı unix_socket kimlik doğrulama yöntemine ayarlanıyor..."
+# sudo mysql -u root -p -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA unix_socket; FLUSH PRIVILEGES;"
 
-echo "MariaDB root kullanıcısı için şifre ve doğrulama yöntemleri başarıyla ayarlandı."
+# echo "MariaDB root kullanıcısı için şifre ve doğrulama yöntemleri başarıyla ayarlandı."
 
 
 # Nginx yapılandırmasının yedeğini alma
@@ -95,7 +95,7 @@ sudo ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/defa
 
 # Nginx servisini yeniden başlatma
 sudo systemctl reload nginx
-
+sudo systemctl restart nginx
 # Certbot kurulumu ve SSL yapılandırması (Eğer Certbot yüklü değilse)
 if ! command -v certbot &>/dev/null; then
     echo "Certbot kuruluyor..."
