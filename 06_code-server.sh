@@ -61,7 +61,8 @@ echo "Nginx Code-Server için yapılandırılıyor..."
 sudo tee /etc/nginx/sites-available/$DOMAIN_NAME.conf > /dev/null <<EOL
 server {
     server_name $DOMAIN_NAME;
-
+    access_log /var/log/nginx/$DOMAIN_NAME.access.log;
+    error_log /var/log/nginx/$DOMAIN_NAME.error.log;
     location / {
         proxy_pass http://127.0.0.1:8081;
         proxy_set_header Host \$host;
@@ -84,7 +85,7 @@ sudo systemctl restart nginx
 
 # UFW yapılandırması (HTTP ve HTTPS açılıyor, 8081 kapanıyor)
 sudo ufw allow 'Nginx Full'
-sudo ufw delete allow 8081/tcp
+sudo ufw delee allow 8081/tcp
 
 # Certbot SSL Sertifikası Oluşturma
 echo "Certbot ile SSL sertifikası alınıyor..."

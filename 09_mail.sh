@@ -1,10 +1,10 @@
 #!/bin/bash
 
+# Domain adını alın
+read -p "Mail domain adını girin (örn: mail.veobu.com): " DOMAIN_NAME
+
 # Postfix ve Dovecot Kurulumu
 echo "Postfix ve Dovecot kuruluyor..."
-
-
-
 sudo apt install postfix dovecot-core dovecot-imapd opendkim opendkim-tools -y 
 sudo systemctl start postfix dovecot
 
@@ -23,12 +23,15 @@ sudo apt install roundcube roundcube-core roundcube-mysql roundcube-plugins -y
 
 # Nginx Konfigürasyonu Roundcube için
 echo "Nginx Roundcube için yapılandırılıyor..."
-sudo tee /etc/nginx/sites-available/roundcube > /dev/null <<EOL
+sudo tee /etc/nginx/sites-available/$DOMAIN_NAME.conf > /dev/null <<EOL
 server {
-    server_name mail.veobu.com;
+    server_name $DOMAIN_NAME;
 
     root /usr/share/roundcube;
     index index.php index.html index.htm;
+
+    access_log /var/log/nginx/$DOMAIN_NAME.access.log;
+    error_log /var/log/nginx/$DOMAIN_NAME.error.log;
 
     location / {
         try_files \$uri \$uri/ =404;
@@ -45,15 +48,17 @@ server {
 }
 EOL
 
-sudo ln -s /etc/nginx/sites-available/roundcube /etc/nginx/sites-enabled/
+# Yapılandırmayı etkinleştirme (sites-enabled dizinine sembolik link oluşturma)
+sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME.conf /etc/nginx/sites-enabled/
+
+# Nginx'i yeniden başlatma
 sudo systemctl reload nginx
 
 # Certbot SSL Sertifikası Oluşturma
 echo "Certbot ile SSL sertifikası alınıyor..."
-sudo certbot --nginx -d mail.veobu.com
+sudo certbot --nginx -d $DOMAIN_NAME
 
-echo "Roundcube Webmail SSL ile https://mail.veobu.com adresinden erişilebilir."
-
+echo "Roundcube Webmail SSL ile https://$DOMAIN_NAME adresinden erişilebilir."
 
 # add_mail_domain betiğini /usr/local/bin'e kopyalayıp çalıştırılabilir hale getirme
 echo "add_mail_domain betiği oluşturuluyor..."

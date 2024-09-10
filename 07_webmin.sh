@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Domain adını alın
+read -p "Webmin domain adını girin (örn: webmin.veobu.com): " DOMAIN_NAME
+
 # Webmin Kurulumu
 echo "Webmin kuruluyor..."
 wget -q http://www.webmin.com/jcameron-key.asc -O- | sudo apt-key add -
@@ -12,9 +15,12 @@ sudo systemctl start webmin
 
 # Nginx Konfigürasyonu Webmin için
 echo "Nginx Webmin için yapılandırılıyor..."
-sudo tee /etc/nginx/sites-available/webmin > /dev/null <<EOL
+sudo tee /etc/nginx/sites-available/$DOMAIN_NAME.conf > /dev/null <<EOL
 server {
-    server_name webmin.veobu.com;
+    server_name $DOMAIN_NAME;
+
+    access_log /var/log/nginx/$DOMAIN_NAME.access.log;
+    error_log /var/log/nginx/$DOMAIN_NAME.error.log;
 
     location / {
         proxy_pass http://localhost:10000;
@@ -26,11 +32,14 @@ server {
 }
 EOL
 
-sudo ln -s /etc/nginx/sites-available/webmin /etc/nginx/sites-enabled/
+# Yapılandırmayı etkinleştirme (sites-enabled dizinine sembolik link oluşturma)
+sudo ln -s /etc/nginx/sites-available/$DOMAIN_NAME.conf /etc/nginx/sites-enabled/
+
+# Nginx'i yeniden başlatma
 sudo systemctl reload nginx
 
 # Certbot SSL Sertifikası Oluşturma
 echo "Certbot ile SSL sertifikası alınıyor..."
-sudo certbot --nginx -d webmin.veobu.com
+sudo certbot --nginx -d $DOMAIN_NAME
 
-echo "Webmin SSL ile https://webmin.veobu.com adresinde çalışacak."
+echo "Webmin SSL ile https://$DOMAIN_NAME adresinde çalışacak."
